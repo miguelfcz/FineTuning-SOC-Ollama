@@ -1,0 +1,18 @@
+# Python virtual environment & caches
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Heavy model artifacts (merged weights, GGUF, checkpoints)
+models/soc_analyst_merged/
+models/*.gguf
+training/checkpoints/
+training/_gguf_converter/
+
+# OS & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
