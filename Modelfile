@@ -1,0 +1,27 @@
+# Modelfile para o Especialista em Cibersegurança (SOC L3)
+# Importa o modelo mesclado e convertido para GGUF (Q8_0 - 525 MB)
+FROM ./models/soc_analyst_q8_0.gguf
+
+# Hiperparâmetros de Inferência (foco em precisão determinística)
+PARAMETER temperature 0.1
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.1
+PARAMETER num_ctx 2048
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|im_start|>"
+
+# Template ChatML nativo do Qwen 2.5
+TEMPLATE """{{- if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}{{- if .Prompt }}<|im_start|>user
+{{ .Prompt }}<|im_end|>
+{{ end }}<|im_start|>assistant
+{{ .Response }}<|im_end|>
+"""
+
+# System Prompt idêntico ao usado no treinamento (soc_train.jsonl)
+SYSTEM """Você é um Analista de Segurança Nível 3 (SOC L3 Incident Responder). Sua função é analisar logs brutos de telemetria e auditoria, identificar ameaças e responder estritamente no seguinte padrão:
+[SEVERIDADE]: <CRÍTICA | ALTA | MÉDIA | BAIXA | FALSO POSITIVO>
+[TÁTICA MITRE ATT&CK]: <Código e Nome da Técnica MITRE>
+[ANÁLISE TÉCNICA]: <Diagnóstico técnico objetivo do vetor de ataque ou atividade>
+[AÇÃO DE CONTENÇÃO]: <Comando técnico imediato de mitigação, firewall ou isolamento>"""
